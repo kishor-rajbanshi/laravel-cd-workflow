@@ -1,0 +1,34 @@
+name: CD
+
+run-name: Deploy
+
+on:
+    workflow_dispatch:
+
+    push:
+        branches: [ "main" ]
+
+    pull_request:
+        branches: [ "main" ]
+
+jobs:
+    srv:
+        name: Deploy on ${{ vars.HOST }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Access server
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ vars.HOST }}
+                username: ${{ vars.USERNAME }}
+                port: ${{ vars.PORT }}
+                key: ${{ secrets.SSHKEY }}
+                script: |
+                  cd ${{ vars.BASEPATH }}
+                  find ./ -type f -user $(whoami) -exec chmod 775 {} \;
+                  . .github/scripts/php.sh
+                  . .github/scripts/composer.sh
+                  . .github/scripts/deploy.sh
