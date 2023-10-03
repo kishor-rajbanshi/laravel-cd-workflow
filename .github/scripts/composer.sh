@@ -13,11 +13,21 @@ find_composer() {
     echo "$path"
 }
 
-composer="$(find_composer)"
+if [ -n "$1" ]; then
+    custom_composer="$1"
+    if [ -x "$custom_composer" ]; then
+        composer="$custom_composer"
+    else
+        echo "Custom Composer directory provided, but Composer not found at: $custom_composer. Exiting."
+        exit 1
+    fi
+else
+    composer="$(find_composer)"
+fi
 
 if [ -n "$composer" ]; then
     echo "Composer found at: $composer"
 else
-    echo "Composer not found. Please install Composer. Exiting."
+    echo "Composer not found. Please install Composer or specify a custom Composer directory. Exiting."
     exit 1
 fi

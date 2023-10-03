@@ -12,7 +12,7 @@ on:
         branches: [ "main" ]
 
 jobs:
-    srv:
+    srv1:
         name: Deploy on ${{ vars.HOST }}
         runs-on: ubuntu-latest
         steps:
@@ -28,7 +28,11 @@ jobs:
                 key: ${{ secrets.SSHKEY }}
                 script: |
                   cd ${{ vars.BASEPATH }}
-                  find ./ -type f -user $(whoami) -exec chmod 775 {} \;
-                  . .github/scripts/php.sh
-                  . .github/scripts/composer.sh
+
+                  # Verify the PHP version meets the minimum requirement by running the PHP version check script.
+                  . .github/scripts/php.sh <minimum_required_php_version>
+
+                  # Ensure Composer is installed and optionally set a custom Composer directory if necessary.
+                  . .github/scripts/composer.sh [<custom_composer_dir>]
+
                   . .github/scripts/deploy.sh

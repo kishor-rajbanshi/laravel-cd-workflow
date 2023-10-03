@@ -7,6 +7,8 @@ echo "Run Script"
 
 git pull origin main
 
+find ./ -type f -user $(whoami) -exec chmod 775 {} \;
+
 $php $composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
 
 $php artisan optimize:clear

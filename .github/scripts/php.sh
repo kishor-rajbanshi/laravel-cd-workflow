@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# Adjust the PHP version to meet the minimum requirement specified by the project.
-min_required_version="7.4.32"
+if [ -n "$1" ]; then
+    min_required_version="$1"
+else
+    echo "Usage: $0 <minimum_required_php_version>"
+    exit 1
+fi
 
 highest_version=""
 export php=""
