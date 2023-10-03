@@ -1,0 +1,38 @@
+name: CD
+
+run-name: Deploy
+
+on:
+    workflow_dispatch:
+
+    push:
+        branches: [ "main" ]
+
+    pull_request:
+        branches: [ "main" ]
+
+jobs:
+    srv1:
+        name: Deploy on ${{ vars.HOST }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Access server
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ vars.HOST }}
+                username: ${{ vars.USERNAME }}
+                port: ${{ vars.PORT }}
+                key: ${{ secrets.SSHKEY }}
+                script: |
+                  cd ${{ vars.BASEPATH }}
+
+                  # Verify the PHP version meets the minimum requirement by running the PHP version check script.
+                  . .github/scripts/php.sh <minimum_required_php_version>
+
+                  # Ensure Composer is installed and optionally set a custom Composer directory if necessary.
+                  . .github/scripts/composer.sh [<custom_composer_dir>]
+
+                  . .github/scripts/deploy.sh
