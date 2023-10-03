@@ -2,20 +2,6 @@
 
 This repository hosts scripts and configuration files tailored for a Continuous Deployment (CD) workflow, meticulously crafted to streamline the deployment of your Laravel project. These resources automate essential deployment tasks on your server, ensuring a hassle-free process.
 
-## Folder structure
-
-```
-/.github
-  /scripts
-    - composer.sh
-    - php.sh
-    - deploy.sh
-  /workflows
-    - deploy.yml
-README.md
-LICENSE
-```
-
 ## GitHub Actions Workflow Configuration
 
 To ensure seamless integration with GitHub Actions, follow these steps:
@@ -45,6 +31,8 @@ To ensure seamless integration with GitHub Actions, follow these steps:
    - `PORT`: SSH port (usually 22).
    - `USERNAME`: Username for SSH access.
 
+5. **Configure Workflow**: Inside your project's .github/workflows directory, you should have a cd.yml file. Make sure it's configured to your specific needs. This workflow is triggered on pushes and pull requests to the main branch.
+
 ## Running the Workflow
 
 You can trigger the deployment workflow in several ways:
@@ -55,15 +43,21 @@ You can trigger the deployment workflow in several ways:
 
 ## Monitoring Deployment
 
-The workflow will:
+During deployment, the workflow performs the following steps:
 
-- SSH into your server.
-- Set file permissions (recursively applying `chmod 775` to files owned by the current user).
-- Check for the highest installed PHP version and ensure it meets your project's minimum requirement.
-- Run Composer to install dependencies, optimize autoloaders, and remove development packages.
-- Clear Laravel's optimization cache.
-- Run database migrations with the `--force` option.
-- Bring the application back up.
+1. **Gracefully Takes Application Offline**: The script uses `($php artisan down) || true` to take the application offline, preventing downtime during deployment.
+
+2. **Fetch Latest Changes**: `git pull origin main` fetches the latest changes from the `main` branch of your Git repository.
+
+3. **Set File Permissions**: `find ./ -type f -user $(whoami) -exec chmod 775 {} \;` sets file permissions recursively, ensuring that files are owned by the current user with appropriate permissions.
+
+4. **Install Composer Dependencies**: `$php $composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist` installs Composer dependencies with optimizations and excludes development packages to reduce deployment size.
+
+5. **Clear and Recache Optimization**: The script clears Laravel's optimization cache with `$php artisan optimize:clear` and then recaches it with `$php artisan optimize` for improved performance.
+
+6. **Run Database Migrations**: `$php artisan migrate --force` executes database migrations with the `--force` option, suitable for non-interactive deployments.
+
+7. **Bring Application Back Online**: After successful deployment, `$php artisan up` brings the application back online.
 
 ## Verifying Deployment
 
