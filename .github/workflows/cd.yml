@@ -28,11 +28,11 @@ jobs:
                 key: ${{ secrets.SSHKEY }}
                 script: |
                   cd ${{ vars.BASEPATH }}
-
+                  #
                   # Verify the PHP version meets the minimum requirement by running the PHP version check script.
                   . .github/scripts/php.sh <minimum_required_php_version>
-
+                  #
                   # Ensure Composer is installed and optionally set a custom Composer directory if necessary.
                   . .github/scripts/composer.sh [<custom_composer_dir>]
-
+                  #
                   . .github/scripts/deploy.sh
