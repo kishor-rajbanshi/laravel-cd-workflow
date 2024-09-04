@@ -8,6 +8,7 @@ This repository hosts scripts and configuration files tailored for a Continuous 
 
 ```bash
 git clone git@github.com:kishor-rajbanshi/laravel-cd-workflow.git .github
+rm -rf .github/.git
 ```
 
 ### 2. Create an SSH Key Pair
