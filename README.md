@@ -41,3 +41,5 @@ In your GitHub repository, go to "Settings" -> "Secrets and variables" -> "Actio
 - `<BRANCH_NAME>_USERNAME`: Username for SSH access.
 - `<BRANCH_NAME>_MIN_PHP_VERSION`: Minimum PHP version required.
 - `<BRANCH_NAME>_COMPOSER`: (Optional) Composer path if stored in a non-default location.
+
+**Note**: It syncs the files using Git, so ensure that Git is properly configured.
