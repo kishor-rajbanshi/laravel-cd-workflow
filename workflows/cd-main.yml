@@ -1,0 +1,33 @@
+name: CD Main
+
+run-name: Deploy Main
+
+on:
+    workflow_dispatch:
+
+    push:
+        branches: [ "main" ]
+
+    pull_request:
+        branches: [ "main" ]
+
+jobs:
+  deploy:
+        name: Deploy on ${{ vars.MAIN_HOST }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Access server
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ vars.MAIN_HOST }}
+                username: ${{ vars.MAIN_USERNAME }}
+                port: ${{ vars.MAIN_PORT }}
+                key: ${{ secrets.MAIN_SSHKEY }}
+                script: |
+                    cd ${{ vars.MAIN_BASEPATH }}
+                    . .github/scripts/php.sh ${{ vars.MAIN_MIN_PHP_VERSION }}
+                    . .github/scripts/composer.sh ${{ vars.MAIN_COMPOSER }}
+                    . .github/scripts/deploy.sh
