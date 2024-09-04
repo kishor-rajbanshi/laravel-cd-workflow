@@ -6,6 +6,8 @@ This repository hosts scripts and configuration files tailored for a Continuous 
 
 ### 1. Clone the Repository
 
+Clone into the project's root directory.
+
 ```bash
 git clone git@github.com:kishor-rajbanshi/laravel-cd-workflow.git .github
 rm -rf .github/.git
