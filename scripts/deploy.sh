@@ -25,7 +25,7 @@ if [ -n "$1" ]; then
         docker build -t "$image_name" --no-cache -f "$1" .
         (docker stop "$container_name") || true
         (docker rm "$container_name") || true
-        docker run -d --name "$container_name" "$image_name"
+        docker run -d --name "$container_name" -P "$2" "$image_name"
 
     elif [[ "$(basename "$1")" == "docker-compose.yml" ]]; then
         docker compose -f "$1" build --no-cache
