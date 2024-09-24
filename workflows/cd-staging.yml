@@ -28,9 +28,11 @@ jobs:
                 key: ${{ secrets.STAGING_SSHKEY }}
                 script: |
                     cd ${{ vars.STAGING_BASEPATH }}
-                    if [ -n "${{ vars.STAGING_MIN_NPM_VERSION }}" ]; then
-                      . .github/scripts/npm.sh ${{ vars.STAGING_MIN_NPM_VERSION }}
+                    if [ -z "${{ vars.STAGING_DOCKER }}" ]; then
+                      if [ -n "${{ vars.STAGING_MIN_NPM_VERSION }}" ]; then
+                        . .github/scripts/npm.sh "${{ vars.STAGING_MIN_NPM_VERSION }}"
+                      fi
+                      . .github/scripts/php.sh "${{ vars.STAGING_MIN_PHP_VERSION }}"
+                      . .github/scripts/composer.sh "${{ vars.STAGING_COMPOSER }}"
                     fi
-                    . .github/scripts/php.sh ${{ vars.STAGING_MIN_PHP_VERSION }}
-                    . .github/scripts/composer.sh ${{ vars.STAGING_COMPOSER }}
-                    . .github/scripts/deploy.sh
+                    . .github/scripts/deploy.sh "${{ vars.STAGING_DOCKER }}"

@@ -28,9 +28,11 @@ jobs:
                 key: ${{ secrets.MAIN_SSHKEY }}
                 script: |
                     cd ${{ vars.MAIN_BASEPATH }}
-                    if [ -n "${{ vars.MAIN_MIN_NPM_VERSION }}" ]; then
-                      . .github/scripts/npm.sh ${{ vars.MAIN_MIN_NPM_VERSION }}
+                    if [ -z "${{ vars.MAIN_DOCKER }}" ]; then
+                      if [ -n "${{ vars.MAIN_MIN_NPM_VERSION }}" ]; then
+                        . .github/scripts/npm.sh "${{ vars.MAIN_MIN_NPM_VERSION }}"
+                      fi
+                      . .github/scripts/php.sh "${{ vars.MAIN_MIN_PHP_VERSION }}"
+                      . .github/scripts/composer.sh "${{ vars.MAIN_COMPOSER }}"
                     fi
-                    . .github/scripts/php.sh ${{ vars.MAIN_MIN_PHP_VERSION }}
-                    . .github/scripts/composer.sh ${{ vars.MAIN_COMPOSER }}
-                    . .github/scripts/deploy.sh
+                    . .github/scripts/deploy.sh "${{ vars.MAIN_DOCKER }}"

@@ -43,5 +43,6 @@ In your GitHub repository, go to "Settings" -> "Secrets and variables" -> "Actio
 - `<BRANCH_NAME>_MIN_NPM_VERSION`: (Optional) Minimum NPM version.
 - `<BRANCH_NAME>_MIN_PHP_VERSION`: Minimum PHP version.
 - `<BRANCH_NAME>_COMPOSER`: (Optional) Composer path if stored in a non-default location.
+- `<BRANCH_NAME>_DOCKER`: (Optional) Absolute path to the Dockerfile or docker-compose file on the remote machine.
 
 **Note**: It syncs the files using Git, so ensure that Git is properly configured. Additionally, Node.js must be installed using NVM (Node Version Manager) for this script to work, as it relies on NVM to manage different versions of NPM.
