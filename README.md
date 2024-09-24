@@ -29,7 +29,8 @@ Copy the public key (`id_ed25519.pub`) to your server's `~/.ssh/authorized_keys`
 
 In your GitHub repository, navigate to "Settings" -> "Secrets and variables" -> "Actions" -> "Secrets" and create a new secret named `<BRANCH_NAME>_SSHKEY`, containing the private SSH key (`id_ed25519`).
 
-Replace <BRANCH_NAME> with either "main" or "develop" depending on where you intend to execute the workflow.
+Replace <BRANCH_NAME> with either "main" or "staging" depending on where you intend to execute the workflow.
+Or you can simply copy any workflow `.yml` file and change the name of the file to the branch name or any unique name, and replace the branch name inside that file for which you want to execute the workflow. Keep in mind that it is case-sensitive, so try to maintain the same case for letters.
 
 ### 4. Set Up GitHub Actions Variables
 
@@ -39,7 +40,8 @@ In your GitHub repository, go to "Settings" -> "Secrets and variables" -> "Actio
 - `<BRANCH_NAME>_HOST`: IP address or hostname of your remote machine.
 - `<BRANCH_NAME>_PORT`: SSH port (usually 22).
 - `<BRANCH_NAME>_USERNAME`: Username for SSH access.
-- `<BRANCH_NAME>_MIN_PHP_VERSION`: Minimum PHP version required.
+- `<BRANCH_NAME>_MIN_NPM_VERSION`: (Optional) Minimum NPM version.
+- `<BRANCH_NAME>_MIN_PHP_VERSION`: Minimum PHP version.
 - `<BRANCH_NAME>_COMPOSER`: (Optional) Composer path if stored in a non-default location.
 
-**Note**: It syncs the files using Git, so ensure that Git is properly configured.
+**Note**: It syncs the files using Git, so ensure that Git is properly configured. Additionally, Node.js must be installed using NVM (Node Version Manager) for this script to work, as it relies on NVM to manage different versions of NPM.

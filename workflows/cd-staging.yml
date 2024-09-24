@@ -1,0 +1,36 @@
+name: CD Staging
+
+run-name: Deploy Staging
+
+on:
+    workflow_dispatch:
+
+    push:
+        branches: [ "staging" ]
+
+    pull_request:
+        branches: [ "staging" ]
+
+jobs:
+  deploy:
+        name: Deploy on ${{ vars.STAGING_HOST }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Access server
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ vars.STAGING_HOST }}
+                username: ${{ vars.STAGING_USERNAME }}
+                port: ${{ vars.STAGING_PORT }}
+                key: ${{ secrets.STAGING_SSHKEY }}
+                script: |
+                    cd ${{ vars.STAGING_BASEPATH }}
+                    if [ -n "${{ vars.STAGING_MIN_NPM_VERSION }}" ]; then
+                      . .github/scripts/npm.sh ${{ vars.STAGING_MIN_NPM_VERSION }}
+                    fi
+                    . .github/scripts/php.sh ${{ vars.STAGING_MIN_PHP_VERSION }}
+                    . .github/scripts/composer.sh ${{ vars.STAGING_COMPOSER }}
+                    . .github/scripts/deploy.sh
