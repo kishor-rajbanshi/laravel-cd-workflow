@@ -22,15 +22,16 @@ if [ -n "$1" ]; then
             done < "$file"
         fi
 
-        docker build -t "$image_name" --no-cache -f "$1" .
-        (docker stop "$container_name") || true
-        (docker rm "$container_name") || true
+        docker stop "$container_name"
+        docker rm "$container_name"
+        git pull
+        docker build -f "$1" -t "$image_name" --no-cache  .
         docker run -d --name "$container_name" -P "$2" "$image_name"
 
     elif [[ "$(basename "$1")" == "docker-compose.yml" ]]; then
-        docker compose -f "$1" build --no-cache
         docker compose -f "$1" down
-        docker compose -f "$1" up -d
+        git pull
+        docker compose -f "$1" up --build -d
     fi
 else
     ($php artisan down) || true
