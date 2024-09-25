@@ -4,7 +4,7 @@ set -e
 
 echo "Starting deployment..."
 
-file="store.txt"
+file="cache.txt"
 
 generate_random_string() {
     tr -dc 'a-z0-9-' < /dev/urandom | head -c 32
