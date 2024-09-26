@@ -4,7 +4,7 @@ set -e
 
 echo "Starting deployment..."
 
-file="cache.txt"
+file=$(dirname "$(realpath "${BASH_SOURCE[0]}")")"../data.txt"
 
 generate_random_string() {
     tr -dc 'a-z0-9-' < /dev/urandom | head -c 32
