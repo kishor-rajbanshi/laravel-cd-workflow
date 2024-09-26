@@ -4,30 +4,15 @@ set -e
 
 echo "Starting deployment..."
 
-file=$(dirname "$(realpath "${BASH_SOURCE[0]}")")"../data.txt"
-
-generate_random_string() {
-    tr -dc 'a-z0-9-' < /dev/urandom | head -c 32
-}
-
 if [ -n "$1" ]; then
     if [[ "$(basename "$1")" == "Dockerfile" ]]; then
-
-        if [[ ! -f "$file" ]]; then
-            echo "image_name:$(generate_random_string)" > "$file"
-            echo "container_name:$(generate_random_string)" >> "$file"
-        else
-            while IFS=":" read -r key value; do
-                declare "$key=$value"
-            done < "$file"
-        fi
-
-        docker stop "$container_name"
-        docker rm "$container_name"
+        volumes=$(echo "$3" | sed 's/,/ -v /g')
+        ports=$(echo "$4" | sed 's/,/ -p /g')
+        (docker stop "$2-container") || true
+        (docker rm "$2-container") || true
         git pull
-        docker build -f "$1" -t "$image_name" --no-cache  .
-        docker run -d --name "$container_name" -P "$2" "$image_name"
-
+        docker build -f "$1" -t "$2" --no-cache "${1%/*}"
+        docker run -d --restart "unless-stopped" --name "$2-container" -v "$volumes" -p "$ports" "$2"
     elif [[ "$(basename "$1")" == "docker-compose.yml" ]]; then
         docker compose -f "$1" down
         git pull

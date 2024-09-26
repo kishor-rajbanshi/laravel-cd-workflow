@@ -35,4 +35,4 @@ jobs:
                       . .github/scripts/php.sh "${{ vars.MAIN_MIN_PHP_VERSION }}"
                       . .github/scripts/composer.sh "${{ vars.MAIN_COMPOSER }}"
                     fi
-                    . .github/scripts/deploy.sh "${{ vars.MAIN_DOCKER }}" "${{ vars.MAIN_DOCKER_PORT }}"
+                    . .github/scripts/deploy.sh "${{ vars.MAIN_DOCKER }}" "${{ vars.MAIN_DOCKER_IMAGE_TAG }}" "${{ vars.MAIN_DOCKER_VOLUMES }}" "${{ vars.MAIN_DOCKER_PORTS }}"
